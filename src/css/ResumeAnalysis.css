@@ -1,0 +1,16 @@
+/* src/components/ResumeAnalysis.css */
+
+.resume-analysis-container {
+    margin-bottom: 2em;
+  }
+  
+  textarea {
+    margin-bottom: 20px;
+  }
+  
+  button {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
