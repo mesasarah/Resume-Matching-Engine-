@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='results.css') }}">
+</head>
+<body>
+    <div class="result-container">
+        <!-- Header with Greeting -->
+        <header>
+            <h1>Hello, {{ analysis.get('name', 'User') }}!</h1>
+        </header>
+
+        <!-- Score and Level -->
+        <section class="score-section">
+            <div class="score-container">
+                <div class="score-bar" style="width: {{ analysis['score'] }}%"></div>
+            </div>
+            <p>Your resume score: <strong>{{ analysis['score'] }}</strong></p>
+            <p>Your level: <strong>{{ analysis['level'] }}</strong></p>
+        </section>
+
+        <!-- Recommendations and Skills -->
+        <section class="recommendations-skills">
+            <div class="recommendations">
+                <h3>Recommended Job:</h3>
+                <p><strong>{{ analysis['recommended_job'] }}</strong></p>
+                <h3>Recommended Skills:</h3>
+                <ul>
+                    {% for skill in analysis['recommended_skills'] %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="certifications-job-postings">
+                <div class="certifications">
+                    <h3>Certifications to Pursue:</h3>
+                    <ul>
+                        {% for skill, link in analysis['certification_links'].items() %}
+                            <li>{{ skill }}: <a href="{{ link }}" target="_blank">Certification Link</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="job-openings">
+                    <h3>Job Openings:</h3>
+                    <ul>
+                        {% for job in analysis['job_openings'] %}
+                            <li>
+                                <strong>{{ job['title'] }}</strong> at <em>{{ job['company'] }}</em>
+                                <a href="{{ job['url'] }}" target="_blank">View Job</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <button onclick="window.history.back()">Go Back</button>
+    </div>
+</body>
+</html>

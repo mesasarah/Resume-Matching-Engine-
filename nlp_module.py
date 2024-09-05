@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 import re
 from time import sleep
 from random import randint
-from datetime import datetime
 
 # Define job roles and associated skills
 job_roles = {
@@ -21,7 +20,7 @@ job_roles = {
     "Business Analyst": ["data analysis", "business intelligence", "requirements gathering", "stakeholder management"]
 }
 
-# Certification links for improving skills
+# Certification links
 certification_links = {
     "python": "https://www.coursera.org/specializations/python",
     "java": "https://www.coursera.org/specializations/java-programming",
@@ -70,9 +69,9 @@ def analyze_resume(file_path):
         text = ''
         for page in pdf_reader.pages:
             text += page.extract_text() or ''
-
-        # Process the text (example logic)
-        text = text.lower()  # Convert to lowercase
+        
+        # Debug: Print extracted text (first 1000 characters)
+        print("Extracted Text:\n", text[:1000])  
 
         # Initialize vectorizer
         vectorizer = TfidfVectorizer(lowercase=True, stop_words='english')
@@ -81,38 +80,59 @@ def analyze_resume(file_path):
         skill_set = [skill for skills in job_roles.values() for skill in skills]
         job_descriptions = list(job_roles.keys())
 
-        # Add the text to the skill set for comparison
-        all_texts = [text] + skill_set
+        # Add the resume text and job descriptions to the skill set for comparison
+        all_texts = [text] + job_descriptions
 
         # Vectorize the texts
         X = vectorizer.fit_transform(all_texts)
 
+        # Debug: Print the shapes of the vectors
+        print("TF-IDF Matrix Shape:", X.shape)
+        
         # Calculate scores for each job role
         scores = {}
         for i, job in enumerate(job_descriptions):
             job_vector = X[i + 1]  # Get the vector for the job description
             score = (X[0] @ job_vector.T).sum()  # Calculate the dot product as score
             scores[job] = score
+        
+        # Debug: Print scores
+        print("Job Scores:\n", scores)
 
         # Find the best job match based on score
         recommended_job = max(scores, key=scores.get)
         
         # Normalize the score to be out of 100
-        max_score = max(scores.values())
+        max_score = max(scores.values(), default=1)
         total_resume_score = (scores[recommended_job] / max_score) * 100
 
-        # Prepare recommendations for certifications based on the job role
+        # Prepare recommendations for certifications based on the recommended job
         job_skills = job_roles[recommended_job]
-        recommendations = {skill: certification_links.get(skill, "No certification available") for skill in job_skills}
+        certifications = {skill: certification_links.get(skill, "No certification available") for skill in job_skills}
 
         # Fetch job openings
         job_openings = fetch_job_openings(recommended_job)
+        
+        # Determine skill gaps
+        resume_skills = {skill for skill in skill_set if skill in text}  # skills found in the resume text
+        missing_skills = set(job_skills) - resume_skills
+        recommended_skills = list(missing_skills)
+
+        # Determine level based on score
+        if total_resume_score < 40:
+            level = "Beginner"
+        elif 40 <= total_resume_score < 80:
+            level = "Intermediate"
+        else:
+            level = "Advanced"
 
         return {
-            'resume_score': round(total_resume_score, 2),
+            'score': round(total_resume_score, 2),
             'recommended_job': recommended_job,
-            'certification_links': recommendations,
-            'job_openings': job_openings
+            'certification_links': certifications,
+            'job_openings': job_openings,
+            'recommended_skills': recommended_skills,
+            'level': level
         }
 
     except Exception as e:
@@ -120,8 +140,8 @@ def analyze_resume(file_path):
 
 def fetch_job_openings(job_title):
     job_openings = []
-    base_url = "https://www.indeed.com/jobs"
-    params = {"q": job_title, "l": "United States"}
+    base_url = "https://www.naukri.com/"
+    params = {"q": job_title, "l": "India"}
 
     try:
         for i in range(0, 2):  # Fetch 2 pages of results
@@ -129,26 +149,21 @@ def fetch_job_openings(job_title):
             response = requests.get(base_url, params=params)
             soup = BeautifulSoup(response.content, "html.parser")
 
-            for div in soup.find_all(name="div", attrs={"class": "slider_container"}):
-                job = {}
-                job_title_elem = div.find("h2", attrs={"class": "jobTitle"})
-                company_elem = div.find("span", attrs={"class": "companyName"})
-                location_elem = div.find("div", attrs={"class": "companyLocation"})
-                summary_elem = div.find("div", attrs={"class": "job-snippet"})
+            # Debug: Print the page content (first 1000 characters)
+            print("Page Content:\n", soup.prettify()[:1000])  
 
+            for div in soup.find_all(name="div", attrs={"class": "jobTuple"}):
+                job = {}
+                job_title_elem = div.find("a", attrs={"class": "title"})
+                company_elem = div.find("a", attrs={"class": "subTitle"})
+                
                 if job_title_elem:
-                    job['job_title'] = job_title_elem.text.strip()
+                    job['title'] = job_title_elem.text.strip()
+                    job['url'] = job_title_elem['href'] if job_title_elem else "No URL available"
+                
                 if company_elem:
                     job['company'] = company_elem.text.strip()
-                if location_elem:
-                    job['location'] = location_elem.text.strip()
-                if summary_elem:
-                    job['summary'] = summary_elem.text.strip()
-
-                job_url_elem = job_title_elem.find('a', href=True)
-                if job_url_elem:
-                    job['url'] = "https://www.indeed.com" + job_url_elem['href']
-
+                
                 if job:
                     job_openings.append(job)
 
@@ -156,5 +171,5 @@ def fetch_job_openings(job_title):
 
     except Exception as e:
         job_openings.append({'error': str(e)})
-
+    
     return job_openings
