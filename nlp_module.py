@@ -1,10 +1,11 @@
 from PyPDF2 import PdfReader
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 import requests
 from bs4 import BeautifulSoup
-import re
 from time import sleep
 from random import randint
+import re
 
 # Define job roles and associated skills
 job_roles = {
@@ -65,20 +66,13 @@ certification_links = {
 def analyze_resume(file_path):
     try:
         # Extract text from the PDF
-        pdf_reader = PdfReader(file_path)
-        text = ''
-        for page in pdf_reader.pages:
-            text += page.extract_text() or ''
-        
-        # Debug: Print extracted text (first 1000 characters)
-        print("Extracted Text:\n", text[:1000])  
+        text = extract_text_from_pdf(file_path)
 
         # Initialize vectorizer
         vectorizer = TfidfVectorizer(lowercase=True, stop_words='english')
 
         # Combine job roles and skill sets into a single list for TF-IDF vectorization
-        skill_set = [skill for skills in job_roles.values() for skill in skills]
-        job_descriptions = list(job_roles.keys())
+        job_descriptions = [' '.join(skills) for skills in job_roles.values()]
 
         # Add the resume text and job descriptions to the skill set for comparison
         all_texts = [text] + job_descriptions
@@ -86,25 +80,16 @@ def analyze_resume(file_path):
         # Vectorize the texts
         X = vectorizer.fit_transform(all_texts)
 
-        # Debug: Print the shapes of the vectors
-        print("TF-IDF Matrix Shape:", X.shape)
-        
-        # Calculate scores for each job role
-        scores = {}
-        for i, job in enumerate(job_descriptions):
-            job_vector = X[i + 1]  # Get the vector for the job description
-            score = (X[0] @ job_vector.T).sum()  # Calculate the dot product as score
-            scores[job] = score
-        
-        # Debug: Print scores
-        print("Job Scores:\n", scores)
+        # Calculate cosine similarity between resume and each job description
+        resume_vector = X[0]
+        similarities = cosine_similarity(resume_vector, X[1:]).flatten()
 
-        # Find the best job match based on score
-        recommended_job = max(scores, key=scores.get)
-        
-        # Normalize the score to be out of 100
-        max_score = max(scores.values(), default=1)
-        total_resume_score = (scores[recommended_job] / max_score) * 100
+        # Calculate scores based on cosine similarity
+        similarity_scores = {job: round(similarity * 100, 2) for job, similarity in zip(job_roles.keys(), similarities)}
+
+        # Find the best job match based on the highest similarity score
+        recommended_job = max(similarity_scores, key=similarity_scores.get)
+        total_resume_score = similarity_scores[recommended_job]
 
         # Prepare recommendations for certifications based on the recommended job
         job_skills = job_roles[recommended_job]
@@ -112,22 +97,27 @@ def analyze_resume(file_path):
 
         # Fetch job openings
         job_openings = fetch_job_openings(recommended_job)
-        
+
         # Determine skill gaps
-        resume_skills = {skill for skill in skill_set if skill in text}  # skills found in the resume text
+        skill_set = [skill for skills in job_roles.values() for skill in skills]
+        resume_skills = {skill for skill in skill_set if skill in text.lower()}  # skills found in the resume text
         missing_skills = set(job_skills) - resume_skills
         recommended_skills = list(missing_skills)
 
-        # Determine level based on score
-        if total_resume_score < 40:
-            level = "Beginner"
-        elif 40 <= total_resume_score < 80:
-            level = "Intermediate"
-        else:
-            level = "Advanced"
+        # Assess resume based on various criteria
+        score_keywords = calculate_keyword_score(text, job_skills)
+        score_experience = calculate_experience_score(text, job_roles[recommended_job])
+        score_education = calculate_education_score(text, recommended_job)
+        score_format = calculate_format_score(text)
+        score_consistency = calculate_consistency_score(text)
+        score_grammar = calculate_grammar_score(text)
+
+        # Calculate overall score
+        overall_score = (score_keywords + score_experience + score_education + score_format + score_consistency + score_grammar) / 6
+        level = determine_level(overall_score)
 
         return {
-            'score': round(total_resume_score, 2),
+            'score': round(overall_score, 2),
             'recommended_job': recommended_job,
             'certification_links': certifications,
             'job_openings': job_openings,
@@ -138,38 +128,93 @@ def analyze_resume(file_path):
     except Exception as e:
         return {'error': str(e)}
 
-def fetch_job_openings(job_title):
-    job_openings = []
-    base_url = "https://www.naukri.com/"
-    params = {"q": job_title, "l": "India"}
-
+def extract_text_from_pdf(file_path):
+    text = ''
     try:
-        for i in range(0, 2):  # Fetch 2 pages of results
-            params["start"] = i * 10
-            response = requests.get(base_url, params=params)
-            soup = BeautifulSoup(response.content, "html.parser")
-
-            # Debug: Print the page content (first 1000 characters)
-            print("Page Content:\n", soup.prettify()[:1000])  
-
-            for div in soup.find_all(name="div", attrs={"class": "jobTuple"}):
-                job = {}
-                job_title_elem = div.find("a", attrs={"class": "title"})
-                company_elem = div.find("a", attrs={"class": "subTitle"})
-                
-                if job_title_elem:
-                    job['title'] = job_title_elem.text.strip()
-                    job['url'] = job_title_elem['href'] if job_title_elem else "No URL available"
-                
-                if company_elem:
-                    job['company'] = company_elem.text.strip()
-                
-                if job:
-                    job_openings.append(job)
-
-            sleep(randint(1, 3))  # Avoid hitting the server too frequently
-
+        pdf_reader = PdfReader(file_path)
+        for page in pdf_reader.pages:
+            text += page.extract_text() or ''
     except Exception as e:
-        job_openings.append({'error': str(e)})
+        raise ValueError(f"Error extracting text from PDF: {e}")
+    return text
+
+def calculate_keyword_score(text, job_skills):
+    keyword_count = sum(text.lower().count(skill) for skill in job_skills)
+    max_keyword_count = len(job_skills) * 10
+    return (keyword_count / max_keyword_count) * 100 if max_keyword_count > 0 else 0
+
+def calculate_experience_score(text, required_experience):
+    # Placeholder function, this needs actual implementation based on experience extraction logic
+    return 50  # Example static value, replace with actual logic
+
+def calculate_education_score(text, job_title):
+    # Placeholder function, this needs actual implementation based on education extraction logic
+    return 50  # Example static value, replace with actual logic
+
+def calculate_format_score(text):
+    # Placeholder function for resume formatting score
+    return 50  # Example static value
+
+def calculate_consistency_score(text):
+    # Placeholder function for consistency score based on text checks
+    return 50  # Example static value
+
+def calculate_grammar_score(text):
+    # Placeholder function for grammar score based on text checks
+    return 50  # Example static value
+
+def determine_level(score):
+    if score < 40:
+        return "Beginner"
+    elif 40 <= score < 80:
+        return "Intermediate"
+    else:
+        return "Advanced"
+
+def fetch_job_openings(job_title):
+    # Define static job links for different job roles
+    job_links = {
+        "Software Engineer": [
+            "https://www.linkedin.com/jobs/view/4003668900/?alternateChannel=search&refId=AH3b8HxfrWYe%2FkBt1Z%2B2LQ%3D%3D&trackingId=GBzvUBNzjBAXgjd6bukgug%3D%3D",
+            "https://in.indeed.com/jobs?q=software+engineer&l=Bengaluru%2C+Karnataka&from=searchOnHP&vjk=d87a7d0d7ef95c2d&advn=1515350661095281"
+        ],
+        "Data Scientist": [
+            "https://www.linkedin.com/jobs/view/4001346933/?alternateChannel=search&refId=Ed6FPETLAk%2FcKEC3dWCUww%3D%3D&trackingId=3QPDZRBdkaAzszRUXPM2kQ%3D%3D",
+            "https://in.indeed.com/jobs?q=data+scientist&l=Bengaluru%2C+Karnataka&from=searchOnDesktopSerp&vjk=7efb1b4bd5538e51"
+        ],
+        "Web Developer": [
+            "https://www.linkedin.com/jobs/view/4007224594/?alternateChannel=search&refId=pFFZkPvwWk7VTA5NaDZ%2FhA%3D%3D&trackingId=8Tx5VKnMTQXAdxTvXLA0cA%3D%3D",
+            "https://in.indeed.com/jobs?q=web+developer&l=Bengaluru%2C+Karnataka&from=searchOnDesktopSerp&vjk=b4e9b00af23be394"
+        ],
+        "Product Manager": [
+            "https://www.linkedin.com/jobs/view/4011972073/?alternateChannel=search&refId=9M3mzMkK1u2fFUiHZJ2vQA%3D%3D&trackingId=dOuUetV0n8jVJTdlFrBI%2Fw%3D%3D",
+            "https://in.indeed.com/jobs?q=project+manager&l=Bengaluru%2C+Karnataka&from=searchOnDesktopSerp&vjk=be12fb0eed08f2e6"
+        ],
+        "UX/UI Designer": [
+            "https://www.indeed.com/viewjob?jk=example9",
+            "https://www.linkedin.com/jobs/view/example10"
+        ],
+        "DevOps Engineer": [
+            "https://www.indeed.com/viewjob?jk=example11",
+            "https://www.linkedin.com/jobs/view/example12"
+        ],
+        "Cybersecurity Analyst": [
+            "https://www.indeed.com/viewjob?jk=example13",
+            "https://www.linkedin.com/jobs/view/example14"
+        ],
+        "Cloud Engineer": [
+            "https://www.indeed.com/viewjob?jk=example15",
+            "https://www.linkedin.com/jobs/view/example16"
+        ],
+        "Digital Marketer": [
+            "https://www.indeed.com/viewjob?jk=example17",
+            "https://www.linkedin.com/jobs/view/example18"
+        ],
+        "Business Analyst": [
+            "https://www.indeed.com/viewjob?jk=example19",
+            "https://www.linkedin.com/jobs/view/example20"
+        ]
+    }
     
-    return job_openings
+    # Return the fixed job links for the recommended job
+    return job_links.get(job_title, ["No job links available"])
