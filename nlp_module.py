@@ -5,8 +5,9 @@ from bs4 import BeautifulSoup
 import re
 from time import sleep
 from random import randint
+from datetime import datetime
 
-# Define a list of job roles and associated skill sets
+# Define job roles and associated skills
 job_roles = {
     "Software Engineer": ["python", "java", "c++", "javascript", "sql", "html", "css"],
     "Data Scientist": ["python", "r", "sql", "machine learning", "data analysis", "statistics"],
@@ -70,8 +71,8 @@ def analyze_resume(file_path):
         for page in pdf_reader.pages:
             text += page.extract_text() or ''
 
-        # Process the text
-        text = text.lower()  
+        # Process the text (example logic)
+        text = text.lower()  # Convert to lowercase
 
         # Initialize vectorizer
         vectorizer = TfidfVectorizer(lowercase=True, stop_words='english')
@@ -95,15 +96,20 @@ def analyze_resume(file_path):
 
         # Find the best job match based on score
         recommended_job = max(scores, key=scores.get)
+        
+        # Normalize the score to be out of 100
+        max_score = max(scores.values())
+        total_resume_score = (scores[recommended_job] / max_score) * 100
 
-        # Prepare recommendations for certifications
-        recommendations = {skill: certification_links.get(skill, "No certification available") for skill in skill_set}
+        # Prepare recommendations for certifications based on the job role
+        job_skills = job_roles[recommended_job]
+        recommendations = {skill: certification_links.get(skill, "No certification available") for skill in job_skills}
 
         # Fetch job openings
         job_openings = fetch_job_openings(recommended_job)
 
         return {
-            'score': scores,
+            'resume_score': round(total_resume_score, 2),
             'recommended_job': recommended_job,
             'certification_links': recommendations,
             'job_openings': job_openings
@@ -113,47 +119,42 @@ def analyze_resume(file_path):
         return {'error': str(e)}
 
 def fetch_job_openings(job_title):
-    job_keys = set()
     job_openings = []
-    params = {
-        "q": job_title,
-        "l": "United States",
-        "start": 0
-    }
-    url = "https://www.indeed.com/jobs"
-    
-    for _ in range(5):  # Limit to the first 5 pages
-        response = requests.get(url, params=params)
-        if response.status_code != 200:
-            break
-        
-        # Extract job keys
-        jk_pattern = re.compile(r"jk:'([a-zA-Z0-9]+)'")
-        keys = jk_pattern.findall(response.text)
-        job_keys.update(keys)
+    base_url = "https://www.indeed.com/jobs"
+    params = {"q": job_title, "l": "United States"}
 
-        params['start'] += 10
-        sleep(randint(1, 3))
+    try:
+        for i in range(0, 2):  # Fetch 2 pages of results
+            params["start"] = i * 10
+            response = requests.get(base_url, params=params)
+            soup = BeautifulSoup(response.content, "html.parser")
 
-    for key in job_keys:
-        job_url = f"https://www.indeed.com/viewjob?jk={key}"
-        job_response = requests.get(job_url)
-        job_soup = BeautifulSoup(job_response.text, 'html.parser')
-        
-        try:
-            job_title = job_soup.find('h1', {'class': 'jobsearch-JobInfoHeader-title'}).text.strip()
-            company = job_soup.find('div', {'class': 'jobsearch-InlineCompanyRating'}).text.strip()
-            location = job_soup.find('div', {'class': 'jobsearch-JobInfoHeader-subtitle'}).text.strip()
-            summary = job_soup.find('div', {'id': 'jobDescriptionText'}).text.strip()
-            
-            job_openings.append({
-                'job_title': job_title,
-                'company': company,
-                'location': location,
-                'summary': summary,
-                'url': job_url
-            })
-        except Exception as e:
-            print(f"Error fetching details for {job_url}: {e}")
+            for div in soup.find_all(name="div", attrs={"class": "slider_container"}):
+                job = {}
+                job_title_elem = div.find("h2", attrs={"class": "jobTitle"})
+                company_elem = div.find("span", attrs={"class": "companyName"})
+                location_elem = div.find("div", attrs={"class": "companyLocation"})
+                summary_elem = div.find("div", attrs={"class": "job-snippet"})
+
+                if job_title_elem:
+                    job['job_title'] = job_title_elem.text.strip()
+                if company_elem:
+                    job['company'] = company_elem.text.strip()
+                if location_elem:
+                    job['location'] = location_elem.text.strip()
+                if summary_elem:
+                    job['summary'] = summary_elem.text.strip()
+
+                job_url_elem = job_title_elem.find('a', href=True)
+                if job_url_elem:
+                    job['url'] = "https://www.indeed.com" + job_url_elem['href']
+
+                if job:
+                    job_openings.append(job)
+
+            sleep(randint(1, 3))  # Avoid hitting the server too frequently
+
+    except Exception as e:
+        job_openings.append({'error': str(e)})
 
     return job_openings
