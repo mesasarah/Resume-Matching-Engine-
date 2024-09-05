@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='results.css') }}">
+</head>
+<body>
+    <!-- Header with Greeting and Toggle Button -->
+    <header>
+        <h1>Hello, {{ analysis.get('name', 'User') }}!</h1>
+        <button class="toggle-resume" onclick="toggleSplitView()">Show Resume</button>
+    </header>
+
+    <!-- Split container for resume and recommendations -->
+    <div class="split-container">
+        <!-- Resume Section (Initially Hidden) -->
+        <div class="split-half resume hidden" id="resume-section">
+            <h2>Your Resume</h2>
+            <p>Here, you can display the resume content dynamically or upload a file viewer if necessary.</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="split-half recommendations" id="recommendations-section">
+            <div class="result-container">
+                <!-- Score and Level Card -->
+                <div class="card">
+                    <h2>Score & Level</h2>
+                    <div class="score-container">
+                        <div class="score-bar" style="width: {{ analysis['score'] }}%"></div>
+                    </div>
+                    <p>Your resume score: <strong>{{ analysis['score'] }}</strong></p>
+                    <p>Your level: <strong>{{ analysis['level'] }}</strong></p>
+                </div>
+
+                <!-- Recommended Job Card -->
+                <div class="card">
+                    <h2>Recommended Job</h2>
+                    <p><strong>{{ analysis['recommended_job'] }}</strong></p>
+                </div>
+
+                <!-- Recommended Skills Card -->
+                <div class="card">
+                    <h2>Recommended Skills</h2>
+                    <ul>
+                        {% for skill in analysis['recommended_skills'] %}
+                            <li>{{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Certifications Card -->
+                <div class="card">
+                    <h2>Certifications to Pursue</h2>
+                    <ul>
+                        {% for skill, link in analysis['certification_links'].items() %}
+                            <li>{{ skill }}: <a href="{{ link }}" target="_blank">Certification Link</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Job Openings Card -->
+                <div class="card">
+                    <h2>Job Openings</h2>
+                    <ul>
+                        {% for job in analysis['job_openings'] %}
+                            <li>
+                                <strong>{{ job['title'] }}</strong> at <em>{{ job['company'] }}</em>
+                                <a href="{{ job['url'] }}" target="_blank">View Job</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <button onclick="goBack()">Go Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSplitView() {
+            document.querySelector('#resume-section').classList.toggle('hidden');
+            document.querySelector('#recommendations-section').classList.toggle('full-width');
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
