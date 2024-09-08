@@ -6,6 +6,13 @@ document.getElementById('resumeForm').addEventListener('submit', function(event)
     
     // Simulate backend NLP processing (replace with actual backend call)
     const file = formData.get('file');
+    
+    if (!file) {
+        alert("Please upload a resume before submitting!");
+        return;
+    }
+    
+    // Simulated NLP result (replace this with your actual backend API call)
     const data = {
         name: "John Doe",  // Example name extracted from resume (replace with dynamic data)
         score: 85,         // Example score (replace with dynamic data)
@@ -20,7 +27,7 @@ document.getElementById('resumeForm').addEventListener('submit', function(event)
     localStorage.setItem('resumeData', JSON.stringify(data));
 
     // Redirect to the results page after processing
-    window.location.href = "/results";  // Adjust to your actual route if using server-side routing
+    window.location.href = "results.html";  // Adjust this if your results page has a different name or path
 });
 
 // On window load, display resume data on the results page
@@ -36,6 +43,10 @@ window.onload = function() {
         document.getElementById('recommendedSkills').textContent = data.recommendedSkills;
         document.getElementById('certifications').textContent = data.certifications;
         document.getElementById('jobRecommendations').textContent = data.jobRecommendations;
+    } else {
+        // Handle the case where there is no resume data (e.g., user directly accessed the results page)
+        alert("No resume data found. Please upload your resume.");
+        window.location.href = "/";  // Redirect back to the form page or home
     }
 };
 
