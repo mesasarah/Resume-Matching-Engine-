@@ -51,6 +51,9 @@ window.onload = function() {
 };
 
 // Function to navigate back to the previous page
-function goBack() {
+const goBack = () => {
     window.history.back();
-}
+};
+
+// Assuming you have a button to trigger the `goBack` function, such as:
+document.getElementById('backButton').addEventListener('click', goBack);
