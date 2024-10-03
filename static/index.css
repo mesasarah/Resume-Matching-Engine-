@@ -21,6 +21,7 @@ nav {
   width: 100%;
 }
 
+/* Consolidated logo styles */
 .logo a {
   font-size: 24px;
   font-weight: bold;
@@ -33,119 +34,68 @@ nav {
   display: flex;
   margin-left: auto;
   padding: 0;
-}
-
-.nav-links li {
-  margin-left: 20px;
+  gap: 20px;
 }
 
 .nav-links a {
   text-decoration: none;
   color: #FFCC00; /* Golden Yellow for contrast */
   font-size: 16px;
-}
-
-.nav-links a:hover {
-  color: #0099CC; /* Sky Blue on hover */
-}
-/* Header Styles */
-header {
-  background-color: #003366; /* Dark Blue background */
-  padding: 20px 40px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative; /* Ensure positioning context for the absolute elements if needed */
-}
-
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center; /* Center items vertically */
-}
-
-.logo a {
-  text-decoration: none;
-  font-size: 24px;
-  font-weight: 700;
-  color: #FFCC00; /* Golden Yellow for contrast */
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-  margin: 0; /* Reset margin */
-  padding: 0; /* Reset padding */
-}
-
-.nav-links li {
-  margin: 0; /* Reset margin */
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #FFCC00; /* Golden Yellow for contrast */
-  font-weight: 500;
   padding: 10px 15px;
   border-radius: 5px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .nav-links a:hover {
   background-color: #0099CC; /* Sky Blue background on hover */
 }
 
-
 /* Hero Section */
 .hero {
-  background: #002C54; /* Dark blue background */
+  background-color: #002C54; /* Dark blue background */
   color: #FDF6F6; /* Light text color */
-  padding: 50px 0; /* Padding around the section */
-  text-align: center; /* Center text alignment */
-  position: relative; /* For positioning child elements */
+  padding: 50px 0;
+  text-align: center;
 }
 
 .hero-content {
-  max-width: 800px; /* Max width of the content */
-  margin: 0 auto; /* Center the content */
-  padding: 0 20px; /* Padding inside the content */
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .hero h1 {
-  font-size: 2.5em; /* Large font size for the headline */
-  margin-bottom: 20px; /* Space below the headline */
+  font-size: 2.5em;
+  margin-bottom: 20px;
 }
 
 .hero p {
-  font-size: 1.2em; /* Slightly larger font for the paragraph */
-  margin-bottom: 30px; /* Space below the paragraph */
+  font-size: 1.2em;
+  margin-bottom: 30px;
 }
 
-.hero-form {
-  display: inline-block; /* Inline-block to center form */
-  margin-top: 20px; /* Margin on top of the form */
+.hero form {
+  display: inline-block;
+  margin-top: 20px;
 }
 
 .file-input {
-  display: block; /* Block display for the file input */
-  margin: 0 auto 20px; /* Center horizontally and space below */
-  padding: 10px; /* Padding inside the input */
-  border: 1px solid #ddd; /* Light border around the input */
-  border-radius: 5px; /* Rounded corners */
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .primary-btn {
-  background-color: #C5001A; /* Red background color */
-  color: #FDF6F6; /* White text color */
-  border: none; /* Remove border */
-  padding: 15px 30px; /* Padding inside the button */
-  font-size: 1em; /* Font size for the button text */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s; /* Smooth transition */
+  background-color: #C5001A; /* Red background */
+  color: #FDF6F6;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .primary-btn:hover {
@@ -153,17 +103,16 @@ header {
 }
 
 .result {
-  margin-top: 20px; /* Space above the result container */
-  font-size: 1em; /* Font size for result text */
+  margin-top: 20px;
+  font-size: 1em;
   color: #FDF6F6; /* White text color */
 }
 
-
-/* Platform Features Section Styles */
+/* Platform Features Section */
 .platform-features {
   text-align: center;
   padding: 20px;
-  background-color: #fff; /* White background */
+  background-color: #fff;
 }
 
 .feature-cards {
@@ -173,7 +122,7 @@ header {
 }
 
 .feature-card {
-  background-color: #fff; /* White background */
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
@@ -189,7 +138,7 @@ header {
 
 .feature-card p {
   font-size: 14px;
-  color: #333333; /* Dark Gray text */
+  color: #333333;
 }
 
 .feature-card:hover {
@@ -197,17 +146,17 @@ header {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Product Tour Section Styles */
+/* Product Tour Section */
 .product-tour {
   text-align: center;
   padding: 40px 20px;
-  background-color: #fff; /* White background */
+  background-color: #fff;
 }
 
 .product-tour h2 {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #003366; /* Dark Blue text */
+  color: #003366;
 }
 
 .product-cards {
@@ -237,7 +186,7 @@ header {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #003366; /* Dark Blue text */
+  color: #003366;
   text-align: center;
   padding: 15px;
 }
@@ -253,16 +202,15 @@ header {
   font-size: 1em;
 }
 
-/* Testimonials Card Styles */
+/* Testimonials Card */
 .testimonials-card {
-  background: #fff; /* White background */
+  background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin: 20px;
+  margin: 20px auto;
   max-width: 600px;
-  margin: auto;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -275,7 +223,7 @@ header {
 .testimonials-card h2 {
   font-size: 1.5em;
   margin-bottom: 10px;
-  color: #003366; /* Dark Blue text */
+  color: #003366;
 }
 
 .testimonials-card blockquote {
@@ -285,20 +233,20 @@ header {
 
 .testimonials-card p {
   font-weight: bold;
-  color: #003366; /* Dark Blue text */
+  color: #003366;
 }
 
-/* Why OurATS Section Styles */
+/* Why OurATS Section */
 .why-ourats {
   text-align: center;
   padding: 40px 20px;
-  background-color: #fff; /* White background */
+  background-color: #fff;
 }
 
 .why-ourats h2 {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #003366; /* Dark Blue text */
+  color: #003366;
 }
 
 .benefits {
@@ -312,126 +260,76 @@ header {
   width: 300px;
   padding: 20px;
   border-radius: 8px;
-  background-color: #fff; /* White background */
+  background-color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .benefit:hover {
-  transform: translateY(-5px); /* Subtle pop-up effect */
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Slightly larger shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .benefit h3 {
   margin: 0 0 10px;
   font-size: 1.2em;
-  color: #003366; /* Dark Blue text */
+  color: #003366;
 }
 
 .benefit p {
   margin: 0;
   font-size: 1em;
-  color: #666; /* Light gray text */
+  color: #666;
 }
 
-/* Developers Section Styles */
+/* Developers Section */
 .developers {
   text-align: center;
   padding: 40px 20px;
-  background-color: #fff; /* White background for the section */
-  margin-bottom: 80px; /* Add space between the section and the footer */
+  background-color: #fff;
+  margin-bottom: 80px;
 }
 
 .developers h2 {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #003366; /* Dark Blue text */
+  color: #003366;
 }
 
 .developer-cards {
   display: flex;
   justify-content: center;
   gap: 20px;
-  flex-wrap: wrap; /* Allows cards to wrap on smaller screens */
+  flex-wrap: wrap;
 }
 
 .developer-card {
-  background-color: #fff; /* White background */
+  background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 50%; /* Circle shape */
-  width: 150px;
-  height: 150px;
-  text-align: center;
-  padding: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  margin: 10px;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.developer-card img {
-  border-radius: 50%; /* Circle shape for the image */
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.developer-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.developer-card h3 {
-  margin: 10px 0 5px;
-  font-size: 1em;
-  color: #003366; /* Dark Blue text */
-}
-
-.developer-card p {
-  margin: 0;
-}
-
-.developer-card a {
-  text-decoration: none;
-  color: #0099CC; /* Sky Blue for LinkedIn link */
-  font-size: 0.9em;
-}
-
-.developer-card a:hover {
-  text-decoration: underline;
-}
-
-
-/* Footer Styles */
+/* Footer Section */
 footer {
   background-color: #003366; /* Dark Blue background */
   color: #FFCC00; /* Golden Yellow text */
-  padding: 40px 20px;
+  padding: 40px 0;
   text-align: center;
 }
 
-footer .footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-footer .footer-logo a {
-  text-decoration: none;
-  font-size: 24px;
-  font-weight: 700;
+footer a {
   color: #FFCC00; /* Golden Yellow for contrast */
-}
-
-footer .footer-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-}
-
-footer .footer-nav a {
   text-decoration: none;
-  color: #FFCC00; /* Golden Yellow for contrast */
-  font-weight: 500;
 }
 
-footer p {
-  font-size: 14px;
-  margin-top: 20px;
-  color: #bbb; /* Light gray text */
+footer a:hover {
+  color: #0099CC; /* Sky Blue on hover */
 }

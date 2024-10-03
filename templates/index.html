@@ -1,59 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OurATS helps you boost your hiring chances by checking your resume with an ATS resume checker. Quickly review, score, and optimize your resume for free.">
     <title>OurATS - Boost Your Hiring Chances</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="/static/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script defer src="/static/js/main.js"></script>
 </head>
 <body>
-    <!-- Header Section -->
     <header>
         <div class="header-container">
-          <div class="logo">
-            <a href="#">OurATS</a>
-          </div>
-          <ul class="nav-links">
-            <li><a href="#">Log in</a></li>
-            <li><a href="#">Get in Touch</a></li>
-          </ul>
+            <div class="logo"><a href="#">OurATS</a></div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Log in</a></li>
+                    <li><a href="#">Get in Touch</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
-    
-    <!-- Hero Section -->
-<section class="hero">
-    <div class="hero-content">
-        <h1>Boost Your Hiring Chances with Our ATS Resume Checker</h1>
-        <p>Quickly review, score, and optimize your resume for free. Our ATS resume checker scans for over 30 common issues, providing instant feedback and improvements.</p>
-        <form id="resumeForm" action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" id="resumeFile" name="file" accept=".pdf">
-            <button type="submit" class="primary-btn">Check Your Score</button>
-        </form>
-        <div id="result"></div>  <!-- To display the analysis result -->
-    </div>
-</section>
 
-    <!-- Platform Features Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Boost Your Hiring Chances with Our ATS Resume Checker</h1>
+            <p>Quickly review, score, and optimize your resume for free. Our ATS resume checker scans for over 30 common issues, providing instant feedback and improvements.</p>
+            <form id="resumeForm" action="/upload" method="post" enctype="multipart/form-data">
+                <label for="resumeFile">Upload your resume (PDF only):</label>
+                <input type="file" id="resumeFile" name="file" accept=".pdf" required>
+                <button type="submit" class="primary-btn">Check Your Score</button>
+            </form>
+            <div id="result"></div>
+        </div>
+    </section>
+
     <section class="platform-features">
         <h2>All-In-One Recruiting Platform</h2>
         <div class="feature-cards">
             <div class="feature-card">
                 <h3>Resume Scoring</h3>
-                <p>Provide a score that shows how well a resume fits the job. This helps candidates understand how strong their resume is and what they can improve.</p>
+                <p>Provide a score that shows how well a resume fits the job. Help candidates understand their resume strength and what they can improve.</p>
             </div>
             <div class="feature-card">
                 <h3>Personalized Recommendations</h3>
-                <p>Give candidates job suggestions, along with recommended skills, certifications, and courses to improve their profiles. This helps candidates grow and find the right job opportunities.</p>
+                <p>Give candidates job suggestions, recommended skills, certifications, and courses to improve their profiles.</p>
             </div>
             <div class="feature-card">
                 <h3>Real-time Job Openings</h3>
-                <p>Display job openings that match the candidate's skills, keeping them updated on relevant opportunities.</p>
+                <p>Display job openings matching the candidate's skills, keeping them updated on relevant opportunities.</p>
             </div>
         </div>
     </section>
 
-    <!-- Product Tour Section -->
     <section class="product-tour">
         <h2>Products Designed to Help You Excel at Hiring</h2>
         <div class="product-cards">
@@ -66,7 +65,7 @@
             <div class="product-card">
                 <div class="product-info">
                     <h3>For Growth</h3>
-                    <p>A powerful all-in-one recruiting product that scales with your organization.</p>
+                    <p>A powerful recruiting product that scales with your organization.</p>
                 </div>
             </div>
             <div class="product-card">
@@ -78,14 +77,12 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
     <section class="testimonials-card">
         <h2>What Our Clients Say</h2>
         <blockquote>"OurATS is easily the best ATS I've used in my 10+ years of recruiting."</blockquote>
         <p>Chase Johnson, Talent at Replit</p>
     </section>
 
-    <!-- Why OurATS Section -->
     <section class="why-ourats">
         <h2>How OurATS Enables Hiring Excellence</h2>
         <div class="benefits">
@@ -104,49 +101,42 @@
         </div>
     </section>
 
-    <!-- Developers Section -->
     <section class="developers">
         <h2>Meet Our Developers</h2>
         <div class="developer-cards">
             <div class="developer-card">
-                <img src="{{ url_for('static', filename='src/developer1.jpg') }}" alt="Developer 1">
+                <img src="developer1.jpg" alt="Developer Sarah">
                 <h3>Sarah</h3>
-                <p><a href="https://www.linkedin.com/in/sarah15" target="_blank">LinkedIn Profile</a></p>
+                <p><a href="https://www.linkedin.com/in/sarah15" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
             </div>
             <div class="developer-card">
-                <img src="{{ url_for('static', filename='src/developer2.jpg') }}" alt="Developer 2">
+                <img src="/src/developer2.jpg" alt="Developer Hyny">
                 <h3>Hyny</h3>
-                <p><a href="http://www.linkedin.com/in/hyny-s-101a04228" target="_blank">LinkedIn Profile</a></p>
+                <p><a href="http://www.linkedin.com/in/hyny-s-101a04228" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
             </div>
             <div class="developer-card">
-                <img src="{{ url_for('static', filename='src/developer3.jpg') }}" alt="Developer 3">
+                <img src="/src/developer3.jpg" alt="Developer Serena">
                 <h3>Serena</h3>
-                <p><a href="https://www.linkedin.com/in/serena-mendanha/" target="_blank">LinkedIn Profile</a></p>
+                <p><a href="https://www.linkedin.com/in/serena-mendanha/" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
             </div>
             <div class="developer-card">
-                <img src="{{ url_for('static', filename='src/developer4.jpg') }}" alt="Developer 4">
+                <img src="/src/developer4.jpg" alt="Developer Varshitha">
                 <h3>Varshu</h3>
-                <p><a href="https://www.linkedin.com/in/varshitha-g-89a9a1314/" target="_blank">LinkedIn Profile</a></p>
+                <p><a href="https://www.linkedin.com/in/varshitha-g-89a9a1314/" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
             </div>
         </div>
     </section>
 
-    <!-- Footer Section -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo"><a href="#">OurATS</a></div>
-            <div class="footer-nav">
+            <nav class="footer-nav">
                 <ul>
-                    <li><a href="products.html">Products</a></li>
-                    <li><a href="resources.html">Resources</a></li>
-                    <li><a href="company.html">Company</a></li>
-                    <li><a href="developers.html">Developers</a></li>
+                    <li><a href="#">Developers</a></li>
                 </ul>
-            </div>
+            </nav>
         </div>
         <p>&copy; 2024 OurATS, Inc.</p>
     </footer>
-
-    <script src="index.js"></script>
 </body>
 </html>
