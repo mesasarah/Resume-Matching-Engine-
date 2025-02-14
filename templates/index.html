@@ -101,42 +101,44 @@
         </div>
     </section>
 
-    <section class="developers">
-        <h2>Meet Our Developers</h2>
-        <div class="developer-cards">
-            <div class="developer-card">
-                <img src="developer1.jpg" alt="Developer Sarah">
-                <h3>Sarah</h3>
-                <p><a href="https://www.linkedin.com/in/sarah15" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
+    
+        <section class="developers">
+            <h2>Meet Our Developers</h2>
+            <div class="developer-cards">
+                <div class="developer-card">
+                    <img src="{{ url_for('static', filename='developer1.jpg') }}" alt="Developer Sarah">
+                    <h3>Sarah</h3>
+                    <a href="https://www.linkedin.com/in/sarah15" target="_blank" rel="noopener noreferrer" class="linkedin-btn">LinkedIn</a>
+                </div>
+                <div class="developer-card">
+                    <img src="{{ url_for('static', filename='developer2.jpg') }}" alt="Developer Hyny">
+                    <h3>Hyny</h3>
+                    <a href="http://www.linkedin.com/in/hyny-s-101a04228" target="_blank" rel="noopener noreferrer" class="linkedin-btn">LinkedIn</a>
+                </div>
+                <div class="developer-card">
+                    <img src="{{ url_for('static', filename='developer3.jpg') }}" alt="Developer Serena">
+                    <h3>Serena</h3>
+                    <a href="https://www.linkedin.com/in/serena-mendanha/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">LinkedIn</a>
+                </div>
+                <div class="developer-card">
+                    <img src="{{ url_for('static', filename='developer4.jpg') }}" alt="Developer Varshitha">
+                    <h3>Varshu</h3>
+                    <a href="https://www.linkedin.com/in/varshitha-g-89a9a1314/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">LinkedIn</a>
+                </div>
             </div>
-            <div class="developer-card">
-                <img src="/src/developer2.jpg" alt="Developer Hyny">
-                <h3>Hyny</h3>
-                <p><a href="http://www.linkedin.com/in/hyny-s-101a04228" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
-            </div>
-            <div class="developer-card">
-                <img src="/src/developer3.jpg" alt="Developer Serena">
-                <h3>Serena</h3>
-                <p><a href="https://www.linkedin.com/in/serena-mendanha/" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
-            </div>
-            <div class="developer-card">
-                <img src="/src/developer4.jpg" alt="Developer Varshitha">
-                <h3>Varshu</h3>
-                <p><a href="https://www.linkedin.com/in/varshitha-g-89a9a1314/" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a></p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo"><a href="#">OurATS</a></div>
-            <nav class="footer-nav">
+        <footer>
+            <div class="footer-logo">
+                <a href="#">OurATS</a>
+            </div>
+            <div class="footer-center">
+                © 2024 OurATS, Inc.
+            </div>
+            <div class="footer-nav">
                 <ul>
                     <li><a href="#">Developers</a></li>
                 </ul>
-            </nav>
-        </div>
-        <p>&copy; 2024 OurATS, Inc.</p>
-    </footer>
-</body>
-</html>
+            </div>
+        </footer>
+        

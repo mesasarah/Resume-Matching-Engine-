@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for, redirect
 import os
 from werkzeug.utils import secure_filename
 from nlp_module import analyze_resume
@@ -30,7 +30,10 @@ def upload_file():
 
         # Perform NLP analysis on the uploaded resume
         analysis_result = analyze_resume(filepath)
-        return jsonify(analysis_result)
+
+        # Render the results page with the analysis data
+        return render_template('results.html', analysis=analysis_result)
+
     else:
         return jsonify({'error': 'Invalid file type, please upload a PDF'}), 400
 

@@ -1,3 +1,82 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding-top: 70px; /* Space for fixed header */
+}
+
+/* Header Styles */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #002f6c; /* Dark blue background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  z-index: 1000;
+}
+
+/* Flexbox for header layout */
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Logo left, nav right */
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Logo */
+.logo a {
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffc107; /* Yellow color */
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li {
+  display: inline;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffc107; /* Yellow color */
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+/* Responsive - Mobile View */
+@media (max-width: 768px) {
+  .header-container {
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 10px;
+  }
+
+  nav ul {
+      gap: 10px;
+  }
+}
+
 /* General Styles */
 body {
   margin: 0;
@@ -286,50 +365,182 @@ nav {
 .developers {
   text-align: center;
   padding: 40px 20px;
-  background-color: #fff;
+  background-color: #f9f9f9;
   margin-bottom: 80px;
+  overflow: hidden; /* Prevents scroll bar */
 }
 
 .developers h2 {
   font-size: 2em;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   color: #003366;
+  font-weight: bold;
 }
 
+/* Developer Cards - Ensuring 4 in a Row */
 .developer-cards {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  gap: 15px;
+  flex-wrap: wrap; /* Ensures responsiveness without scrolling */
+  max-width: 100%;
+  margin: 0 auto;
 }
 
+/* Developer Card Styling */
 .developer-card {
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  width: 300px;
+  border-radius: 10px;
+  padding: 15px;
+  width: 220px;
+  text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  flex: 1;
+  min-width: 220px;
 }
 
+/* Hover Effect */
 .developer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Developer Images */
+.developer-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid #003366;
+}
+
+/* Developer Names */
+.developer-card h3 {
+  margin: 10px 0;
+  font-size: 1.2em;
+  color: #003366;
+}
+
+/* LinkedIn Button */
+.linkedin-btn {
+  display: inline-block;
+  background-color: #0077b5;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9em;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.linkedin-btn:hover {
+  background-color: #005f8e;
   transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .developer-cards {
+    flex-wrap: wrap; /* Prevents overflow */
+    justify-content: center;
+  }
+  .developer-card {
+    width: 45%; /* Two in a row on medium screens */
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .developer-card {
+    width: 100%; /* Single column on very small screens */
+  }
 }
 
 /* Footer Section */
 footer {
-  background-color: #003366; /* Dark Blue background */
-  color: #FFCC00; /* Golden Yellow text */
-  padding: 40px 0;
-  text-align: center;
+  background-color: #002244; /* Deep Navy Blue */
+  color: #ffffff; /* White text */
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-top: 50px;
+  position: relative;
+  width: 100%;
 }
 
-footer a {
-  color: #FFCC00; /* Golden Yellow for contrast */
+/* Footer Left - "OurATS" */
+.footer-logo a {
+  color: #FFCC00; /* Gold */
   text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
-footer a:hover {
-  color: #0099CC; /* Sky Blue on hover */
+.footer-logo a:hover {
+  color: #00C3FF; /* Sky Blue */
 }
+
+/* Footer Right - Developers */
+.footer-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.footer-nav li {
+  display: inline;
+}
+
+.footer-nav a {
+  color: #FFCC00; /* Gold */
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+.footer-nav a:hover {
+  color: #00C3FF; /* Sky Blue */
+  text-decoration: underline;
+}
+
+/* Centered Copyright Text */
+.footer-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-logo, .footer-nav {
+    margin-bottom: 10px;
+  }
+
+  .footer-center {
+    position: static;
+    transform: none;
+    margin-top: 10px;
+  }
+}
+/* Fix Unwanted Scroll Bar */
+footer {
+  width: 100%;
+  overflow: hidden; /* Prevents horizontal scrolling */
+  box-sizing: border-box; /* Ensures padding doesn’t increase width */
+}
+
